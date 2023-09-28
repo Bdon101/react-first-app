@@ -6,7 +6,7 @@ function MyApp() {
   const [characters, setCharacters] = useState([
       {
         name: 'Charlie',
-        job: 'Janitor',
+        job: 'Police',
       },
       // the rest of the data
     ]); 
