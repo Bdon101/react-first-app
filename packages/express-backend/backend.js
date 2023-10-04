@@ -40,12 +40,7 @@ const users = {
           id: 'zap555', 
           name: 'Dennis',
           job: 'Bartender',
-       },
-       {
-        "id": "qwe123",
-        "job": "Zookeeper",
-        "name": "Cindy"
-        }
+       }
     ]
  }
  const findUserByName = (name) => { 
@@ -82,9 +77,33 @@ const addUser = (user) => {
     users['users_list'].push(user);
     return user;
 }
+const deleteUser = (user) => {
+    
+    const index = users['users_list'].findIndex((u) => u.id === user.id);
+
+    if (index !== -1) {
+        users['users_list'].splice(index, 1);
+    }
+
+    return user;
+    
+}
 
 app.post('/users', (req, res) => {
     const userToAdd = req.body;
     addUser(userToAdd);
     res.send();
+});
+
+app.delete('/users/:id', (req, res) => {
+    const id = req.params['id'];//or req.params.id
+    let result = findUserById(id);
+
+    if (result === undefined) {
+        res.status(404).send('Resource not found.');
+    } else {
+        deleteUser(result)
+        res.send();
+    }   
+
 });
