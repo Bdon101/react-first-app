@@ -1,8 +1,9 @@
 // backend.js
 import express from "express";
+import cors from "cors";
 const app = express();
 const port = 8000;
-
+app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -13,7 +14,9 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
 });    
-
+function generateRandomID() {
+    return Math.random().toString();
+  }
 const users = { 
     users_list : [
        { 
@@ -74,6 +77,13 @@ app.get('/users/:id', (req, res) => {
 });
 
 const addUser = (user) => {
+    
+    if (!user['id']){
+
+        user['id'] = generateRandomID();
+
+    }
+
     users['users_list'].push(user);
     return user;
 }
@@ -91,8 +101,8 @@ const deleteUser = (user) => {
 
 app.post('/users', (req, res) => {
     const userToAdd = req.body;
-    addUser(userToAdd);
-    res.send();
+    const addedUser = addUser(userToAdd);
+    res.status(201).send(addedUser);
 });
 
 app.delete('/users/:id', (req, res) => {
@@ -103,7 +113,7 @@ app.delete('/users/:id', (req, res) => {
         res.status(404).send('Resource not found.');
     } else {
         deleteUser(result)
-        res.send();
+        res.send(204);
     }   
 
 });
